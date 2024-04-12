@@ -100,3 +100,66 @@ void TaskManager::unloadTasks()
     else
         remove("mytasks.txt");
 }
+int TaskManager::menu()
+{
+    int choice;
+    cout<<endl;
+    cout<<"1. Add New Task"<<endl;
+    cout<<"2. Delete Task"<<endl;
+    cout<<"3. View All Tasks"<<endl;
+    cout<<"4. Exit"<<endl;
+    cout<<"Enter your choice: ";
+    cin>>choice;
+    return choice;
+}
+void TaskManager::addTask()
+{
+    string t,d,dd;    
+    cout<<"\nEnter task title:"<<endl;
+    cin.ignore();
+    getline(cin,t);
+    cout<<"Enter task description:"<<endl;
+    getline(cin,d);
+    cout<<"Enter due date: "<<endl;
+    getline(cin,dd);
+    TaskNode newTask(t,d,dd);
+    tasks.push_front(newTask);
+    cout<<"Task Added Successfully"<<endl;
+}
+void TaskManager::deleteTask(string &t)
+{
+    forward_list<TaskNode>::iterator it,it1;
+    bool flag=true;
+    it=tasks.begin();
+    it1=tasks.before_begin();
+    
+    while(it!=tasks.end())
+    {
+        if(it->getTitle()==t)
+        {
+            tasks.erase_after(it1);
+            cout<<"\nTask deleted Successfully"<<endl;
+            flag=false;
+            break;
+        }
+        it1=it++;
+    }
+    if(flag)
+        cout<<"\nTask not found"<<endl;
+}
+void TaskManager::viewAllTasks()
+{
+    if(tasks.empty())
+        cout<<"\nNo Task in the task manager";
+    else
+        for(auto task:tasks)
+            task.printTask();
+    char x;
+    cout<<"\nEnter any key to proceed:";
+    cin>>x;
+}
+TaskManager::~TaskManager()
+{
+    unloadTasks();
+    isObjectCreated=false;
+}
