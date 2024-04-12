@@ -58,3 +58,45 @@ class TaskManager
 
 };
 bool TaskManager::isObjectCreated=false;
+void TaskManager::loadTasks()
+{
+    tasks.clear();
+    ifstream fin;
+    string t,d,dd;
+    fin.open("mytasks.txt",ios::in|ios::binary);
+    if(!fin)
+        cout<<"Task Manager is empty";
+    else
+    {
+        fin.ignore();
+        while(!fin.eof())
+        {
+            getline(fin,t);
+            getline(fin,d);
+            getline(fin,dd);
+            tasks.push_front(*(new TaskNode(t,d,dd)));
+        }
+    }
+    fin.close();
+
+}
+void TaskManager::unloadTasks()
+{
+    TaskNode temp;
+    ofstream fout;
+    if(!tasks.empty())
+    {
+        fout.open("mytasks.txt",ios::out|ios::binary);
+        while(!tasks.empty())
+        {
+            temp=tasks.front();
+            fout<<'\n'<<temp.getTitle();
+            fout<<'\n'<<temp.getDescription();
+            fout<<'\n'<<temp.getDueDate();
+            tasks.pop_front();
+        }
+        fout.close();
+    }
+    else
+        remove("mytasks.txt");
+}
