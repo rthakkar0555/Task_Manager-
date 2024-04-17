@@ -163,3 +163,35 @@ TaskManager::~TaskManager()
     unloadTasks();
     isObjectCreated=false;
 }
+int main()
+{
+    TaskManager *tm;
+    tm=TaskManager::getTaskManager();
+    string temp;
+    while(true)
+    {
+        system("cls");
+        switch(tm->menu())
+        {
+            case 1:
+                tm->addTask();
+                break;
+            case 2:
+                cout<<"\nEnter title of the task to delete: ";
+                cin.ignore();
+                getline(cin,temp);
+                tm->deleteTask(temp);
+                break;
+            case 3:
+                tm->viewAllTasks();
+                break;
+            case 4:
+                delete tm;
+                exit(0);
+            default:
+                cout<<"\nInvalid choice, retry";
+        }
+        getchar();
+        fflush(stdin);
+    }
+}
